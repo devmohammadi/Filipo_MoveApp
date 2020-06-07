@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -15,7 +18,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements MovieItemClickListener {
 
     private List<slide> slideList;
     private ViewPager sliderpager;
@@ -58,7 +61,7 @@ public class HomeActivity extends AppCompatActivity {
         lstMovieNew.add(new Movie("Move 4", R.drawable.movie2));
         lstMovieNew.add(new Movie("Move 5", R.drawable.movie1));
 
-        MovieAdapter movieAdapter = new MovieAdapter(this, lstMovieNew);
+        MovieAdapter movieAdapter = new MovieAdapter(this, lstMovieNew, this);
         NewMoviesRV.setAdapter(movieAdapter);
         NewMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
@@ -70,9 +73,22 @@ public class HomeActivity extends AppCompatActivity {
         lstMoviePopular.add(new Movie("Move 3", R.drawable.movie1));
         lstMoviePopular.add(new Movie("Move 4", R.drawable.movie2));
         lstMoviePopular.add(new Movie("Move 5", R.drawable.movie1));
-        new MovieAdapter(this, lstMoviePopular);
+        new MovieAdapter(this, lstMoviePopular, this);
         PopularMoviesRV.setAdapter(movieAdapter);
         PopularMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    }
+
+    @Override
+    public void onMoveClick(Movie movie, ImageView movieImageView) {
+        //here we send movie information to detail activity
+        //also we ll create transition animation between the tow activity
+        Intent intent = new Intent(this,MovieDetailActivity.class);
+        //send movie information to detail activity
+        intent.putExtra("title",movie.getTitle());
+        intent.putExtra("imgURL",movie.getThumbnail());
+        //create animation
+        ActivityOptions options=ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this,movieImageView,"sharedName");
+        startActivity(intent,options.toBundle());
     }
 
 
