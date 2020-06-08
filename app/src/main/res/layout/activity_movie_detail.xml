@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MovieDetailActivity"
+    tools:context=".ui.MovieDetailActivity"
     android:background="@color/colorPrimary">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,20 +13,41 @@
 
 
         <ImageView
-            android:scaleType="centerCrop"
             android:id="@+id/detail_movie_cover"
             android:layout_width="wrap_content"
             android:layout_height="245dp"
+            android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/movie1"/>
+            app:srcCompat="@drawable/movie1" />
 
         <ImageView
-            android:id="@+id/detail_img"
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_movie_cover"
+            app:layout_constraintEnd_toEndOf="@+id/detail_movie_cover"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/gradient_background" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/play_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/detail_movie_cover"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/detail_movie_cover"
+            app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
+
+        <ImageView
+            android:id="@+id/detail_movie_img"
             android:layout_width="125dp"
             android:layout_height="175dp"
-            android:layout_marginStart="56dp"
+            android:layout_marginStart="16dp"
             android:scaleType="centerCrop"
             android:transitionName="sharedName"
             app:layout_constraintBottom_toBottomOf="@id/detail_movie_cover"
@@ -36,19 +57,32 @@
             tools:ignore="MissingConstraints" />
 
         <TextView
-            android:textColor="#fff"
             android:id="@+id/detail_movie_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
-            android:text="textview"
+            android:text="textView"
+            android:textColor="#fff"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/detail_img"
-            app:layout_constraintTop_toBottomOf="@+id/detail_movie_cover"/>
+            app:layout_constraintStart_toEndOf="@id/detail_movie_img"
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_cover" />
+
+
+        <TextView
+            android:id="@+id/detail_movie_Dname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="textview"
+            android:textColor="#fff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/detail_movie_img"
+            app:layout_constraintTop_toTopOf="@+id/detail_movie_title" />
 
         <TextView
             android:lineSpacingExtra="8dp"
@@ -64,7 +98,7 @@
             android:text="@string/simple"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detail_img"/>
+            app:layout_constraintTop_toBottomOf="@+id/detail_movie_img"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
