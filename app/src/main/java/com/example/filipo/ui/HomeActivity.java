@@ -8,8 +8,16 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.filipo.data.DataSours;
 import com.example.filipo.models.Movie;
 import com.example.filipo.adapter.MovieAdapter;
@@ -18,6 +26,10 @@ import com.example.filipo.R;
 import com.example.filipo.adapter.SliderPagerAdapter;
 import com.example.filipo.models.slide;
 import com.google.android.material.tabs.TabLayout;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +43,16 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     private TabLayout indicator;
     private RecyclerView NewMoviesRV;
     private RecyclerView PopularMoviesRV;
-
+    private RequestQueue requestQueue;
+    List<Movie> lstMoviePopular = new ArrayList<>();
+    List<Movie> lstMovieNew = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        requestQueue = Volley.newRequestQueue(this);
+
 
         iniView();
         iniSlider();
@@ -44,15 +60,65 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         iniPopularMovie();
 
     }
+    public void iniPopularMovie() {
+        String urlImg="https://image.tmdb.org/t/p/w500/wxPhn4ef1EAo5njxwBkAEVrlJJG.jpg?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+        String URL = "https://api.themoviedb.org/3/movie/popular?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("results");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject results = jsonArray.getJSONObject(i);
+                        String title = results.getString("title");
+                        lstMoviePopular.add(new Movie(title, R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
+                    }ShowRecyclerviewPopular();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
 
-    private void iniPopularMovie() {
-        MovieAdapter movieAdapterPopular = new MovieAdapter(this, DataSours.getPopularMovie(), this);
+    private void ShowRecyclerviewPopular() {
+        MovieAdapter movieAdapterPopular = new MovieAdapter(this,lstMoviePopular, this);
         PopularMoviesRV.setAdapter(movieAdapterPopular);
         PopularMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void iniNewMovie() {
-        MovieAdapter movieAdapterNew = new MovieAdapter(this, DataSours.getNewMovie(), this);
+        String URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("results");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject results = jsonArray.getJSONObject(i);
+                        String title = results.getString("title");
+                        lstMovieNew.add(new Movie(title, R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
+                    }ShowRecyclerviewNew();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void ShowRecyclerviewNew() {
+        MovieAdapter movieAdapterNew = new MovieAdapter(this, lstMovieNew, this);
         NewMoviesRV.setAdapter(movieAdapterNew);
         NewMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
@@ -96,7 +162,6 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, movieImageView, "sharedName");
         startActivity(intent, options.toBundle());
     }
-
 
     class SliderTimer extends TimerTask {
         //

@@ -10,6 +10,7 @@ public class Movie {
     private String streamingLink;
     private int coverPhoto;
 
+
     public Movie(String title, int thumbnail, int coverPhoto, String dname) {
         this.title = title;
         this.thumbnail = thumbnail;
@@ -17,7 +18,7 @@ public class Movie {
         this.dname = dname;
     }
 
-    public Movie(String title, String description, int thumbnail, String studio, String rating, String streamingLink) {
+    public Movie(String title, String description, String studio) {
         this.title = title;
         this.description = description;
         this.thumbnail = thumbnail;
@@ -37,6 +38,14 @@ public class Movie {
 
     public void setDname(String dname) {
         this.dname = dname;
+    }
+
+    public int getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(int thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public int getCoverPhoto() {
@@ -61,14 +70,6 @@ public class Movie {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public int getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(int thumbnail) {
-        this.thumbnail = thumbnail;
     }
 
     public String getStudio() {
