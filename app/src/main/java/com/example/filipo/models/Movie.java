@@ -9,7 +9,14 @@ public class Movie {
     private String rating;
     private String streamingLink;
     private int coverPhoto;
+    private String imgUlr;
 
+    public Movie(String title, String imgUlr, int coverPhoto, String dname) {
+        this.title = title;
+        this.dname = dname;
+        this.coverPhoto = coverPhoto;
+        this.imgUlr = imgUlr;
+    }
 
     public Movie(String title, int thumbnail, int coverPhoto, String dname) {
         this.title = title;
@@ -30,6 +37,14 @@ public class Movie {
     public Movie(String title, int thumbnail) {
         this.title = title;
         this.thumbnail = thumbnail;
+    }
+
+    public String getImgUlr() {
+        return imgUlr;
+    }
+
+    public void setImgUlr(String imgUlr) {
+        this.imgUlr = imgUlr;
     }
 
     public String getDname() {

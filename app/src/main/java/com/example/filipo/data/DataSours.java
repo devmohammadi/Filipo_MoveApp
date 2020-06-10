@@ -1,5 +1,7 @@
 package com.example.filipo.data;
 
+import android.view.View;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -19,11 +21,15 @@ import org.json.JSONObject;
 
 public class DataSours {
 
-    String URL = "https://api.themoviedb.org/3/movie/popular?api_key=ab66cda7c4961a2384e5c24949cf99fe";
-    String TAG = DataSours.class.getSimpleName();
+    String URL;
+    String RESULT_URL;
+    String BASE_URL = "https://api.themoviedb.org/3/movie/";
+    String API_KEY = "?api_key=ab66cda7c4961a2384e5c24949cf99fe";
     private RequestQueue requestQueue;
 
     public void jsonParse() {
+        RESULT_URL = "popular";
+        URL = BASE_URL + RESULT_URL + API_KEY;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -49,21 +55,21 @@ public class DataSours {
     public static List<Movie> getNewMovie() {
         //Recyclerview setup for new movie
         List<Movie> lstMovieNew = new ArrayList<>();
-        lstMovieNew.add(new Movie("Move 1", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
-        lstMovieNew.add(new Movie("Move 2", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
-        lstMovieNew.add(new Movie("Move 3", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
-        lstMovieNew.add(new Movie("Move 4", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
-        lstMovieNew.add(new Movie("Move 5", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMovieNew.add(new Movie("Move 1", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMovieNew.add(new Movie("Move 2", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMovieNew.add(new Movie("Move 3", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMovieNew.add(new Movie("Move 4", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMovieNew.add(new Movie("Move 5", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
         return lstMovieNew;
     }
 
     public static List<Movie> getPopularMovie() {
         //Recyclerview setup for popular movie
         List<Movie> lstMoviePopular = new ArrayList<>();
-        lstMoviePopular.add(new Movie("Move 1", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
-        lstMoviePopular.add(new Movie("Move 3", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
-        lstMoviePopular.add(new Movie("Move 4", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
-        lstMoviePopular.add(new Movie("Move 5", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMoviePopular.add(new Movie("Move 1", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMoviePopular.add(new Movie("Move 3", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMoviePopular.add(new Movie("Move 4", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMoviePopular.add(new Movie("Move 5", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
         return lstMoviePopular;
     }
 
@@ -94,4 +100,6 @@ public class DataSours {
 //        });
 //        Volley.newRequestQueue(this).add(stringRequest);
 
+
 }
+

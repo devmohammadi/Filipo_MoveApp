@@ -18,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.example.filipo.data.DataSours;
 import com.example.filipo.models.Movie;
 import com.example.filipo.adapter.MovieAdapter;
@@ -33,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,6 +48,11 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     private RequestQueue requestQueue;
     List<Movie> lstMoviePopular = new ArrayList<>();
     List<Movie> lstMovieNew = new ArrayList<>();
+    String URL;
+    String RESULT_URL;
+    String IMAGE_URL = "https://image.tmdb.org/t/p/w500";
+    String BASE_URL = "https://api.themoviedb.org/3/movie/";
+    String API_KEY = "?api_key=ab66cda7c4961a2384e5c24949cf99fe";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +67,10 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         iniPopularMovie();
 
     }
+
     public void iniPopularMovie() {
-        String urlImg="https://image.tmdb.org/t/p/w500/wxPhn4ef1EAo5njxwBkAEVrlJJG.jpg?api_key=ab66cda7c4961a2384e5c24949cf99fe";
-        String URL = "https://api.themoviedb.org/3/movie/popular?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+        RESULT_URL = "popular";
+        URL = BASE_URL + RESULT_URL + API_KEY;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -71,8 +79,10 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject results = jsonArray.getJSONObject(i);
                         String title = results.getString("title");
-                        lstMoviePopular.add(new Movie(title, R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
-                    }ShowRecyclerviewPopular();
+                        String poster_path = results.getString("poster_path");
+                        lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, R.drawable.splitercoverphoto, "Director's name"));
+                    }
+                    ShowRecyclerviewPopular();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -87,13 +97,14 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     }
 
     private void ShowRecyclerviewPopular() {
-        MovieAdapter movieAdapterPopular = new MovieAdapter(this,lstMoviePopular, this);
+        MovieAdapter movieAdapterPopular = new MovieAdapter(this, lstMoviePopular, this);
         PopularMoviesRV.setAdapter(movieAdapterPopular);
         PopularMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void iniNewMovie() {
-        String URL = "https://api.themoviedb.org/3/movie/now_playing?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+        RESULT_URL = "now_playing";
+        URL = BASE_URL + RESULT_URL + API_KEY;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -102,8 +113,10 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject results = jsonArray.getJSONObject(i);
                         String title = results.getString("title");
-                        lstMovieNew.add(new Movie(title, R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
-                    }ShowRecyclerviewNew();
+                        String poster_path = results.getString("poster_path");
+                        lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, R.drawable.splitercoverphoto, "Director's name"));
+                    }
+                    ShowRecyclerviewNew();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -127,18 +140,41 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         //Show four new movies
         //get api rest image and title new film
         slideList = new ArrayList<>();
-        slideList.add(new slide(R.drawable.slide1, "title slide 1"));
-        slideList.add(new slide(R.drawable.slide2, "title slide 2"));
-        slideList.add(new slide(R.drawable.slide3, "title slide 3"));
-        slideList.add(new slide(R.drawable.slide4, "title slide 4"));
-        SliderPagerAdapter adapter = new SliderPagerAdapter(this, slideList);
-        sliderpager.setAdapter(adapter);
-
+        RESULT_URL = "upcoming";
+        URL = BASE_URL + RESULT_URL + API_KEY;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("results");
+                    for (int i = 1; i <= 10; i++) {
+                        JSONObject results = jsonArray.getJSONObject(i);
+                        String title = results.getString("title");
+                        String backdrop_path = results.getString("backdrop_path");
+                        slideList.add(new slide(IMAGE_URL + backdrop_path + API_KEY, title));
+                    }
+                    ShowSlider();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
 
         //setup time for slider
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new SliderTimer(), 4000, 6000);
         indicator.setupWithViewPager(sliderpager, true);
+    }
+
+    private void ShowSlider() {
+        SliderPagerAdapter adapter = new SliderPagerAdapter(this, slideList);
+        sliderpager.setAdapter(adapter);
     }
 
     private void iniView() {
@@ -155,7 +191,7 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         Intent intent = new Intent(this, MovieDetailActivity.class);
         //send movie information to detail activity
         intent.putExtra("title", movie.getTitle());
-        intent.putExtra("imgURL", movie.getThumbnail());
+        intent.putExtra("imgURL", movie.getImgUlr());
         intent.putExtra("imgCover", movie.getCoverPhoto());
         intent.putExtra("dName", movie.getDname());
         //create animation
