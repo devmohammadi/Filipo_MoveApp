@@ -3,26 +3,26 @@ package com.example.filipo.models;
 public class Movie {
     private String title;
     private String description;
-    private String dname;
-    private int thumbnail;
+    private String ReleaseDate;
+    private String thumbnail;
     private String studio;
     private String rating;
     private String streamingLink;
-    private int coverPhoto;
-    private String imgUlr;
+    private String coverPhoto;
 
-    public Movie(String title, String imgUlr, int coverPhoto, String dname) {
-        this.title = title;
-        this.dname = dname;
-        this.coverPhoto = coverPhoto;
-        this.imgUlr = imgUlr;
-    }
-
-    public Movie(String title, int thumbnail, int coverPhoto, String dname) {
+    public Movie(String title, String thumbnail, String coverPhoto, String ReleaseDate,String description) {
         this.title = title;
         this.thumbnail = thumbnail;
         this.coverPhoto = coverPhoto;
-        this.dname = dname;
+        this.ReleaseDate = ReleaseDate;
+        this.description = description;
+    }
+
+    public Movie(String title, String thumbnail, String coverPhoto, String ReleaseDate) {
+        this.title = title;
+        this.thumbnail = thumbnail;
+        this.coverPhoto = coverPhoto;
+        this.ReleaseDate = ReleaseDate;
     }
 
     public Movie(String title, String description, String studio) {
@@ -34,40 +34,33 @@ public class Movie {
         this.streamingLink = streamingLink;
     }
 
-    public Movie(String title, int thumbnail) {
+    public Movie(String title, String thumbnail) {
         this.title = title;
         this.thumbnail = thumbnail;
     }
 
-    public String getImgUlr() {
-        return imgUlr;
+
+    public String getReleaseDate() {
+        return ReleaseDate;
     }
 
-    public void setImgUlr(String imgUlr) {
-        this.imgUlr = imgUlr;
+    public void setReleaseDate(String ReleaseDate) {
+        this.ReleaseDate = ReleaseDate;
     }
 
-    public String getDname() {
-        return dname;
-    }
-
-    public void setDname(String dname) {
-        this.dname = dname;
-    }
-
-    public int getThumbnail() {
+    public String getThumbnail() {
         return thumbnail;
     }
 
-    public void setThumbnail(int thumbnail) {
+    public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
     }
 
-    public int getCoverPhoto() {
+    public String getCoverPhoto() {
         return coverPhoto;
     }
 
-    public void setCoverPhoto(int coverPhoto) {
+    public void setCoverPhoto(String coverPhoto) {
         this.coverPhoto = coverPhoto;
     }
 

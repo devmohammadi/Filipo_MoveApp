@@ -80,7 +80,10 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                         JSONObject results = jsonArray.getJSONObject(i);
                         String title = results.getString("title");
                         String poster_path = results.getString("poster_path");
-                        lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, R.drawable.splitercoverphoto, "Director's name"));
+                        String backdrop_path = results.getString("backdrop_path");
+                        String overview = results.getString("overview");
+                        String release_date = results.getString("release_date");
+                        lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date,overview));
                     }
                     ShowRecyclerviewPopular();
                 } catch (JSONException e) {
@@ -114,7 +117,10 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                         JSONObject results = jsonArray.getJSONObject(i);
                         String title = results.getString("title");
                         String poster_path = results.getString("poster_path");
-                        lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, R.drawable.splitercoverphoto, "Director's name"));
+                        String backdrop_path = results.getString("backdrop_path");
+                        String overview = results.getString("overview");
+                        String release_date = results.getString("release_date");
+                        lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date,overview));
                     }
                     ShowRecyclerviewNew();
                 } catch (JSONException e) {
@@ -186,14 +192,15 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
 
     @Override
     public void onMoveClick(Movie movie, ImageView movieImageView) {
-        //here we send movie information to detail activity
-        //also we ll create transition animation between the tow activity
+        //there we send movie information to detail activity
+        //also we'll create transition animation between the tow activity
         Intent intent = new Intent(this, MovieDetailActivity.class);
         //send movie information to detail activity
         intent.putExtra("title", movie.getTitle());
-        intent.putExtra("imgURL", movie.getImgUlr());
+        intent.putExtra("imgURL", movie.getThumbnail());
         intent.putExtra("imgCover", movie.getCoverPhoto());
-        intent.putExtra("dName", movie.getDname());
+        intent.putExtra("dName", movie.getReleaseDate());
+        intent.putExtra("description", movie.getDescription());
         //create animation
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, movieImageView, "sharedName");
         startActivity(intent, options.toBundle());

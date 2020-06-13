@@ -18,7 +18,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ImageView MovieCoverImage;
     private TextView tvTitle;
     private TextView tvDescription;
-    private TextView tvDname;
+    private TextView tvReleaseDate;
     private FloatingActionButton play_fab;
 
     @Override
@@ -35,14 +35,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         play_fab = findViewById(R.id.play_fab);
 
         String movieTitle = getIntent().getExtras().getString("title");
-        int imageResourceId = getIntent().getExtras().getInt("imgURL");
-        int imageCover = getIntent().getExtras().getInt("imgCover");
+        String imageResourceId = getIntent().getExtras().getString("imgURL");
+        String imageCover = getIntent().getExtras().getString("imgCover");
         String movieDname = getIntent().getExtras().getString("dName");
-
+        String movieDescription = getIntent().getExtras().getString("description");
 
         MovieThumbnailImg = findViewById(R.id.detail_movie_img);
         Glide.with(this).load(imageResourceId).into(MovieThumbnailImg);
-        MovieThumbnailImg.setImageResource(imageResourceId);
+       // MovieThumbnailImg.setImageResource(imageResourceId);
 
         MovieCoverImage = findViewById(R.id.detail_movie_cover);
         Glide.with(this).load(imageCover).into(MovieCoverImage);
@@ -51,12 +51,12 @@ public class MovieDetailActivity extends AppCompatActivity {
         tvTitle.setText(movieTitle);
         getSupportActionBar().setTitle(movieTitle);
 
-        tvDname = findViewById(R.id.detail_movie_Dname);
-        tvDname.setText(movieDname);
 
         tvDescription = findViewById(R.id.detail_movie_desc);
+        tvDescription.setText(movieDescription);
 
-        tvDname = findViewById(R.id.detail_movie_Dname);
+        tvReleaseDate = findViewById(R.id.detail_movie_ReleaseDate);
+        tvReleaseDate.setText(movieDname);
 
         //setup animation
         MovieCoverImage.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_animation));

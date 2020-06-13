@@ -40,7 +40,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull  MyViewHolder holder, int position) {
         holder.tvTitle.setText(mData.get(position).getTitle());
         //holder.imgMovie.setImageResource(Integer.parseInt(mData.get(position).getThumbnail()));
-        Glide.with(context).load(mData.get(position).getImgUlr())
+        Glide.with(context).load(mData.get(position).getThumbnail())
                 .centerCrop()
                 .placeholder(R.drawable.movie1)
                 .into(holder.imgMovie);

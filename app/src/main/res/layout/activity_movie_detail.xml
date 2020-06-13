@@ -14,8 +14,8 @@
 
         <ImageView
             android:id="@+id/detail_movie_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="245dp"
+            android:layout_width="410dp"
+            android:layout_height="246dp"
             android:scaleType="centerCrop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -71,7 +71,7 @@
 
 
         <TextView
-            android:id="@+id/detail_movie_Dname"
+            android:id="@+id/detail_movie_ReleaseDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"

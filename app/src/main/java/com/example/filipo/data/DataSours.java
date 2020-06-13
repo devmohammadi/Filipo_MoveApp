@@ -66,7 +66,7 @@ public class DataSours {
     public static List<Movie> getPopularMovie() {
         //Recyclerview setup for popular movie
         List<Movie> lstMoviePopular = new ArrayList<>();
-//        lstMoviePopular.add(new Movie("Move 1", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
+//        lstMoviePopular.add(new Movie("Move 1", R.drawable.movie1, R.drawable.splitercoverphoto, "Director's name"));
 //        lstMoviePopular.add(new Movie("Move 3", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
 //        lstMoviePopular.add(new Movie("Move 4", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
 //        lstMoviePopular.add(new Movie("Move 5", R.drawable.movie2, R.drawable.splitercoverphoto, "Director's name"));
