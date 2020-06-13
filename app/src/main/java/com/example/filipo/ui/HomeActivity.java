@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -19,7 +20,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
-import com.example.filipo.data.DataSours;
 import com.example.filipo.models.Movie;
 import com.example.filipo.adapter.MovieAdapter;
 import com.example.filipo.adapter.MovieItemClickListener;
@@ -53,6 +53,7 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     String IMAGE_URL = "https://image.tmdb.org/t/p/w500";
     String BASE_URL = "https://api.themoviedb.org/3/movie/";
     String API_KEY = "?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
