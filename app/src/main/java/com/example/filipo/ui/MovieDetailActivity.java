@@ -25,38 +25,42 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
-
         iniViews();
 
     }
 
     void iniViews() {
-        //get the data
+        //call view
         play_fab = findViewById(R.id.play_fab);
 
+        //get data
         String movieTitle = getIntent().getExtras().getString("title");
         String imageResourceId = getIntent().getExtras().getString("imgURL");
         String imageCover = getIntent().getExtras().getString("imgCover");
-        String movieDname = getIntent().getExtras().getString("dName");
+        String movieReleaseDate = getIntent().getExtras().getString("ReleaseDate");
         String movieDescription = getIntent().getExtras().getString("description");
 
+        //set Thumbnail image movie chosen
         MovieThumbnailImg = findViewById(R.id.detail_movie_img);
         Glide.with(this).load(imageResourceId).into(MovieThumbnailImg);
-       // MovieThumbnailImg.setImageResource(imageResourceId);
 
+        //set cover image movie chosen
         MovieCoverImage = findViewById(R.id.detail_movie_cover);
         Glide.with(this).load(imageCover).into(MovieCoverImage);
 
+        //set text title movie chosen
         tvTitle = findViewById(R.id.detail_movie_title);
         tvTitle.setText(movieTitle);
+        //set action bar with title movie chosen
         getSupportActionBar().setTitle(movieTitle);
 
-
+        //set text description movie chosen
         tvDescription = findViewById(R.id.detail_movie_desc);
         tvDescription.setText(movieDescription);
 
+        //set text release date movie chosen
         tvReleaseDate = findViewById(R.id.detail_movie_ReleaseDate);
-        tvReleaseDate.setText(movieDname);
+        tvReleaseDate.setText(movieReleaseDate);
 
         //setup animation
         MovieCoverImage.setAnimation(AnimationUtils.loadAnimation(this, R.anim.scale_animation));

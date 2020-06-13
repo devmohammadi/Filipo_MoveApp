@@ -46,13 +46,18 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     private RecyclerView NewMoviesRV;
     private RecyclerView PopularMoviesRV;
     private RequestQueue requestQueue;
-    List<Movie> lstMoviePopular = new ArrayList<>();
-    List<Movie> lstMovieNew = new ArrayList<>();
+    private List<Movie> lstMoviePopular = new ArrayList<>();
+    private List<Movie> lstMovieNew = new ArrayList<>();
     String URL;
     String RESULT_URL;
     String IMAGE_URL = "https://image.tmdb.org/t/p/w500";
     String BASE_URL = "https://api.themoviedb.org/3/movie/";
     String API_KEY = "?api_key=ab66cda7c4961a2384e5c24949cf99fe";
+    String title;
+    String poster_path;
+    String backdrop_path;
+    String overview;
+    String release_date;
 
 
     @Override
@@ -60,8 +65,6 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         requestQueue = Volley.newRequestQueue(this);
-
-
         iniView();
         iniSlider();
         iniNewMovie();
@@ -70,6 +73,7 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     }
 
     public void iniPopularMovie() {
+        //Get data from api for popular movies
         RESULT_URL = "popular";
         URL = BASE_URL + RESULT_URL + API_KEY;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -79,12 +83,12 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject results = jsonArray.getJSONObject(i);
-                        String title = results.getString("title");
-                        String poster_path = results.getString("poster_path");
-                        String backdrop_path = results.getString("backdrop_path");
-                        String overview = results.getString("overview");
-                        String release_date = results.getString("release_date");
-                        lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date,overview));
+                        title = results.getString("title");
+                        poster_path = results.getString("poster_path");
+                        backdrop_path = results.getString("backdrop_path");
+                        overview = results.getString("overview");
+                        release_date = results.getString("release_date");
+                        lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date, overview));
                     }
                     ShowRecyclerviewPopular();
                 } catch (JSONException e) {
@@ -101,12 +105,14 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     }
 
     private void ShowRecyclerviewPopular() {
+        //Show Recyclerview
         MovieAdapter movieAdapterPopular = new MovieAdapter(this, lstMoviePopular, this);
         PopularMoviesRV.setAdapter(movieAdapterPopular);
         PopularMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void iniNewMovie() {
+        //Get data from api for new movies
         RESULT_URL = "now_playing";
         URL = BASE_URL + RESULT_URL + API_KEY;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -116,12 +122,12 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject results = jsonArray.getJSONObject(i);
-                        String title = results.getString("title");
-                        String poster_path = results.getString("poster_path");
-                        String backdrop_path = results.getString("backdrop_path");
-                        String overview = results.getString("overview");
-                        String release_date = results.getString("release_date");
-                        lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date,overview));
+                        title = results.getString("title");
+                        poster_path = results.getString("poster_path");
+                        backdrop_path = results.getString("backdrop_path");
+                        overview = results.getString("overview");
+                        release_date = results.getString("release_date");
+                        lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date, overview));
                     }
                     ShowRecyclerviewNew();
                 } catch (JSONException e) {
@@ -138,13 +144,14 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
     }
 
     private void ShowRecyclerviewNew() {
+        //Show Recyclerview
         MovieAdapter movieAdapterNew = new MovieAdapter(this, lstMovieNew, this);
         NewMoviesRV.setAdapter(movieAdapterNew);
         NewMoviesRV.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
     }
 
     private void iniSlider() {
-        //Show four new movies
+        //Show 10 upcoming movies
         //get api rest image and title new film
         slideList = new ArrayList<>();
         RESULT_URL = "upcoming";
@@ -156,8 +163,8 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 1; i <= 10; i++) {
                         JSONObject results = jsonArray.getJSONObject(i);
-                        String title = results.getString("title");
-                        String backdrop_path = results.getString("backdrop_path");
+                        title = results.getString("title");
+                        backdrop_path = results.getString("backdrop_path");
                         slideList.add(new slide(IMAGE_URL + backdrop_path + API_KEY, title));
                     }
                     ShowSlider();
@@ -179,36 +186,8 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         indicator.setupWithViewPager(sliderpager, true);
     }
 
-    private void ShowSlider() {
-        SliderPagerAdapter adapter = new SliderPagerAdapter(this, slideList);
-        sliderpager.setAdapter(adapter);
-    }
-
-    private void iniView() {
-        sliderpager = (ViewPager) findViewById(R.id.slider_pager);
-        indicator = (TabLayout) findViewById(R.id.indicator);
-        NewMoviesRV = (RecyclerView) findViewById(R.id.RV_movieNew);
-        PopularMoviesRV = (RecyclerView) findViewById(R.id.Rv_movePopular);
-    }
-
-    @Override
-    public void onMoveClick(Movie movie, ImageView movieImageView) {
-        //there we send movie information to detail activity
-        //also we'll create transition animation between the tow activity
-        Intent intent = new Intent(this, MovieDetailActivity.class);
-        //send movie information to detail activity
-        intent.putExtra("title", movie.getTitle());
-        intent.putExtra("imgURL", movie.getThumbnail());
-        intent.putExtra("imgCover", movie.getCoverPhoto());
-        intent.putExtra("dName", movie.getReleaseDate());
-        intent.putExtra("description", movie.getDescription());
-        //create animation
-        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, movieImageView, "sharedName");
-        startActivity(intent, options.toBundle());
-    }
-
     class SliderTimer extends TimerTask {
-        //
+        //Create a method to set the slider time
         @Override
         public void run() {
             HomeActivity.this.runOnUiThread(new Runnable() {
@@ -221,5 +200,35 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                 }
             });
         }
+    }
+
+    private void ShowSlider() {
+        //Show Slider
+        SliderPagerAdapter adapter = new SliderPagerAdapter(this, slideList);
+        sliderpager.setAdapter(adapter);
+    }
+
+    private void iniView() {
+        //call view
+        sliderpager = findViewById(R.id.slider_pager);
+        indicator = findViewById(R.id.indicator);
+        NewMoviesRV = findViewById(R.id.RV_movieNew);
+        PopularMoviesRV = findViewById(R.id.Rv_movePopular);
+    }
+
+    @Override
+    public void onMoveClick(Movie movie, ImageView movieImageView) {
+        //there we send movie information to detail activity
+        //also we'll create transition animation between the tow activity
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        //send movie information to detail activity
+        intent.putExtra("title", movie.getTitle());
+        intent.putExtra("imgURL", movie.getThumbnail());
+        intent.putExtra("imgCover", movie.getCoverPhoto());
+        intent.putExtra("ReleaseDate", movie.getReleaseDate());
+        intent.putExtra("description", movie.getDescription());
+        //create animation
+        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, movieImageView, "sharedName");
+        startActivity(intent, options.toBundle());
     }
 }

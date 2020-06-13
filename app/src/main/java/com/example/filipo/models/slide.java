@@ -1,5 +1,8 @@
 package com.example.filipo.models;
 
+//Create model for SliderPagerAdapter
+//Get the name of the movie and the movie poster from the web service for use in the slider
+
 public class slide {
 
     private String Image;
