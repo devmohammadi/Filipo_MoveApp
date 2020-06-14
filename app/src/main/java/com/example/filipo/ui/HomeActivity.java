@@ -10,7 +10,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -40,6 +43,9 @@ import java.util.TimerTask;
 
 public class HomeActivity extends AppCompatActivity implements MovieItemClickListener {
 
+    private TextView TvNew;
+    private TextView TvPopular;
+    private ProgressBar progressBar;
     private List<slide> slideList;
     private ViewPager sliderpager;
     private TabLayout indicator;
@@ -79,6 +85,8 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                progressBar.setVisibility(View.GONE);
+                TvPopular.setVisibility(View.VISIBLE);
                 try {
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -98,6 +106,8 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                progressBar.setVisibility(View.GONE);
+                TvPopular.setVisibility(View.VISIBLE);
                 error.printStackTrace();
             }
         });
@@ -118,6 +128,7 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                TvNew.setVisibility(View.VISIBLE);
                 try {
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -137,6 +148,7 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                TvNew.setVisibility(View.VISIBLE);
                 error.printStackTrace();
             }
         });
@@ -214,6 +226,12 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         indicator = findViewById(R.id.indicator);
         NewMoviesRV = findViewById(R.id.RV_movieNew);
         PopularMoviesRV = findViewById(R.id.Rv_movePopular);
+        progressBar = findViewById(R.id.progressBar_home);
+        TvNew = findViewById(R.id.tvNew);
+        TvNew.setVisibility(View.GONE);
+        TvPopular = findViewById(R.id.TvPopular);
+        TvPopular.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -229,6 +247,6 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         intent.putExtra("description", movie.getDescription());
         //create animation
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, movieImageView, "sharedName");
-        startActivity(intent, options.toBundle());
+        startActivity(intent,options.toBundle());
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,11 +43,11 @@ public class MovieDetailActivity extends AppCompatActivity {
 
         //set Thumbnail image movie chosen
         MovieThumbnailImg = findViewById(R.id.detail_movie_img);
-        Glide.with(this).load(imageResourceId).into(MovieThumbnailImg);
+        Glide.with(this).load(imageResourceId).centerCrop().placeholder(R.drawable.movie1).into(MovieThumbnailImg);
 
         //set cover image movie chosen
         MovieCoverImage = findViewById(R.id.detail_movie_cover);
-        Glide.with(this).load(imageCover).into(MovieCoverImage);
+        Glide.with(this).load(imageCover).centerCrop().placeholder(R.drawable.movie1).into(MovieCoverImage);
 
         //set text title movie chosen
         tvTitle = findViewById(R.id.detail_movie_title);
