@@ -85,22 +85,28 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                progressBar.setVisibility(View.GONE);
-                TvPopular.setVisibility(View.VISIBLE);
-                try {
-                    JSONArray jsonArray = response.getJSONArray("results");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject results = jsonArray.getJSONObject(i);
-                        title = results.getString("title");
-                        poster_path = results.getString("poster_path");
-                        backdrop_path = results.getString("backdrop_path");
-                        overview = results.getString("overview");
-                        release_date = results.getString("release_date");
-                        lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date, overview));
+                if (response != null) {
+                    progressBar.setVisibility(View.GONE);
+                    TvPopular.setVisibility(View.VISIBLE);
+                    try {
+                        JSONArray jsonArray = response.getJSONArray("results");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                JSONObject results = jsonArray.getJSONObject(i);
+                                title = results.getString("title");
+                                poster_path = results.getString("poster_path");
+                                backdrop_path = results.getString("backdrop_path");
+                                overview = results.getString("overview");
+                                release_date = results.getString("release_date");
+                                lstMoviePopular.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date, overview));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        ShowRecyclerviewPopular();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    ShowRecyclerviewPopular();
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
@@ -132,13 +138,17 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                 try {
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject results = jsonArray.getJSONObject(i);
-                        title = results.getString("title");
-                        poster_path = results.getString("poster_path");
-                        backdrop_path = results.getString("backdrop_path");
-                        overview = results.getString("overview");
-                        release_date = results.getString("release_date");
-                        lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date, overview));
+                        try {
+                            JSONObject results = jsonArray.getJSONObject(i);
+                            title = results.getString("title");
+                            poster_path = results.getString("poster_path");
+                            backdrop_path = results.getString("backdrop_path");
+                            overview = results.getString("overview");
+                            release_date = results.getString("release_date");
+                            lstMovieNew.add(new Movie(title, IMAGE_URL + poster_path + API_KEY, IMAGE_URL + backdrop_path + API_KEY, release_date, overview));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     ShowRecyclerviewNew();
                 } catch (JSONException e) {
@@ -174,10 +184,15 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
                 try {
                     JSONArray jsonArray = response.getJSONArray("results");
                     for (int i = 1; i <= 10; i++) {
-                        JSONObject results = jsonArray.getJSONObject(i);
-                        title = results.getString("title");
-                        backdrop_path = results.getString("backdrop_path");
-                        slideList.add(new slide(IMAGE_URL + backdrop_path + API_KEY, title));
+                        try {
+                            JSONObject results = jsonArray.getJSONObject(i);
+                            title = results.getString("title");
+                            backdrop_path = results.getString("backdrop_path");
+                            slideList.add(new slide(IMAGE_URL + backdrop_path + API_KEY, title));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                     ShowSlider();
                 } catch (JSONException e) {
@@ -247,6 +262,6 @@ public class HomeActivity extends AppCompatActivity implements MovieItemClickLis
         intent.putExtra("description", movie.getDescription());
         //create animation
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(HomeActivity.this, movieImageView, "sharedName");
-        startActivity(intent,options.toBundle());
+        startActivity(intent, options.toBundle());
     }
 }
